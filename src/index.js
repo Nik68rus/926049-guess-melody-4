@@ -1,17 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./components/app/app.jsx";
+import questions from "./mocks/questions";
 
-const init = () => {
-  const settings = {
-    gameTime: 5,
-    errorCount: 3
-  };
-
-  ReactDOM.render(
-      <App gameTime={settings.gameTime} errorCount={settings.errorCount} />,
-      document.querySelector(`#root`)
-  );
+const Settings = {
+  GAME_TIME: 5,
+  ERRORS_COUNT: 3
 };
 
-init();
+ReactDOM.render(
+    <App
+      gameTime={Settings.GAME_TIME}
+      errorCount={Settings.ERRORS_COUNT}
+      questions={questions}
+    />,
+    document.querySelector(`#root`)
+);
+

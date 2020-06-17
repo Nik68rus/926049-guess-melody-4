@@ -14,7 +14,7 @@ describe(`WelcomeScreen component`, () => {
         <WelcomeScreen
           time={1}
           errorCount={1}
-          onStartClick={onWelcomeButtonClick}
+          onWelcomeButtonClick={onWelcomeButtonClick}
         />
     );
 
