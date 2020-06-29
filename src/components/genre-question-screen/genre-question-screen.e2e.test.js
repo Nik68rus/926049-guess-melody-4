@@ -33,7 +33,8 @@ describe(`GenreQuestionScreen component`, () => {
   it(`When user answers genre question form is not sent`, () => {
     const {question} = mock;
     const onAnswer = jest.fn();
-    const genreQuestion = shallow(<GenreQuestionScreen onAnswer={onAnswer} question={question} />);
+    const renderPlayer = jest.fn();
+    const genreQuestion = shallow(<GenreQuestionScreen onAnswer={onAnswer} question={question} renderPlayer={renderPlayer}/>);
 
     const form = genreQuestion.find(`form`);
     const formSendPrevention = jest.fn();
@@ -48,9 +49,10 @@ describe(`GenreQuestionScreen component`, () => {
   it(`User answer passed to callback is consistent with "userAnswer" prop`, () => {
     const {question} = mock;
     const onAnswer = jest.fn();
+    const renderPlayer = jest.fn();
     const userAnswer = [false, true, false, false];
 
-    const genreQuestion = shallow(<GenreQuestionScreen onAnswer={onAnswer} question={question} />);
+    const genreQuestion = shallow(<GenreQuestionScreen onAnswer={onAnswer} question={question} renderPlayer={renderPlayer}/>);
     const form = genreQuestion.find(`form`);
     const inputTwo = genreQuestion.find(`input`).at(1);
 
