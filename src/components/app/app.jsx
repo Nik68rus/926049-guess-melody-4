@@ -1,11 +1,11 @@
 import React, {PureComponent} from "react";
-import WelcomeScreen from "../welcome-screen/welcome-screen.jsx";
-import GenreQuestionScreen from "../genre-question-screen/genre-question-screen.jsx";
-import ArtistQuestionScreen from "../artist-question-screen/artist-question-screen.jsx";
+import WelcomeScreen from "../welcome-screen/welcome-screen";
+import GenreQuestionScreen from "../genre-question-screen/genre-question-screen";
+import ArtistQuestionScreen from "../artist-question-screen/artist-question-screen";
 import {GameType} from "../../const";
 import PropTypes from 'prop-types';
 import {Switch, Route, BrowserRouter} from "react-router-dom";
-import GameScreen from '../game-screen/game-screen.jsx';
+import GameScreen from '../game-screen/game-screen';
 import withAudioPlayer from "../../hocs/with-audio-player/with-audio-player";
 import {connect} from 'react-redux';
 import {ActionCreator} from '../../reducer';

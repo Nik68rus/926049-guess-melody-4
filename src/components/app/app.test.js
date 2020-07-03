@@ -1,6 +1,10 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import App from '../app/app';
+import {App} from '../app/app';
+import configureStore from 'redux-mock-store';
+import {Provider} from 'react-redux';
+
+const mockStore = configureStore([]);
 
 const questions = [
   {
@@ -39,6 +43,45 @@ const questions = [
 ];
 
 it(`App correctly renders after relaunch`, () => {
-  const tree = renderer.create(<App gameTime={0} errorCount={0} questions={questions} />).toJSON();
+  const store = mockStore({mistakes: 0});
+  const tree = renderer.create(
+      <Provider store={store}>
+        <App
+          gameTime={0}
+          maxMistakes={0}
+          step={-1}
+          questions={questions}
+          onUserAnswer={()=>{}}
+          onWelcomeButtonClick={() => {}}
+        />
+      </Provider>, {createNodeMock: () => {
+        return {};
+      }}).toJSON();
+  expect(tree).toMatchSnapshot();
+});
+
+it(`Render GenreQuestionScreen`, () => {
+  const store = mockStore({
+    mistakes: 3,
+  });
+
+  const tree = renderer
+    .create(
+        <Provider store={store}>
+          <App
+            gameTime={0}
+            maxMistakes={0}
+            step={0}
+            questions={questions}
+            onUserAnswer={()=>{}}
+            onWelcomeButtonClick={() => {}}
+          />
+        </Provider>, {
+          createNodeMock: () => {
+            return {};
+          }
+        })
+    .toJSON();
+
   expect(tree).toMatchSnapshot();
 });

@@ -25,4 +25,11 @@ module.exports = {
     ],
   },
   devtool: `source-map`,
+  resolve: {
+    modules: [
+      `node_modules`,
+      path.resolve(path.join(__dirname, `public`))
+    ],
+    extensions: [`.js`, `.jsx`, `.ts`, `.tsx`, `.webm`],
+  },
 };

@@ -1,7 +1,6 @@
 import {extend} from './utils.js';
 import {GameType} from './const.js';
 import questions from './mocks/questions';
-import {act} from 'react-test-renderer';
 
 const initialState = {
   mistakes: 0,
