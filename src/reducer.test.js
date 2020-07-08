@@ -6,7 +6,7 @@ it(`Reducer without additional parameters should return initial state`, () => {
     mistakes: 0,
     step: -1,
     maxMistakes: 3,
-    gametime: 5,
+    gameTime: 5,
     questions,
   });
 });
