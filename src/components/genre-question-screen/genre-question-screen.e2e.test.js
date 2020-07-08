@@ -1,5 +1,5 @@
 import React from "react";
-import {configure, shallow} from "enzyme";
+import {configure, shallow, mount} from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import GenreQuestionScreen from "./genre-question-screen.jsx";
 
@@ -34,7 +34,13 @@ describe(`GenreQuestionScreen component`, () => {
     const {question} = mock;
     const onAnswer = jest.fn();
     const renderPlayer = jest.fn();
-    const genreQuestion = shallow(<GenreQuestionScreen onAnswer={onAnswer} question={question} renderPlayer={renderPlayer}/>);
+    const genreQuestion = shallow(<GenreQuestionScreen
+      onAnswer={onAnswer}
+      question={question}
+      renderPlayer={renderPlayer}
+      onChange={() => {}}
+      userAnswers={[false, false, false, false]}
+    />);
 
     const form = genreQuestion.find(`form`);
     const formSendPrevention = jest.fn();
@@ -48,11 +54,17 @@ describe(`GenreQuestionScreen component`, () => {
 
   it(`User answer passed to callback is consistent with "userAnswer" prop`, () => {
     const {question} = mock;
-    const onAnswer = jest.fn();
+    const onAnswer = jest.fn((...args) => [...args]);
     const renderPlayer = jest.fn();
-    const userAnswer = [false, true, false, false];
+    const userAnswers = [false, true, false, false];
 
-    const genreQuestion = shallow(<GenreQuestionScreen onAnswer={onAnswer} question={question} renderPlayer={renderPlayer}/>);
+    const genreQuestion = mount(<GenreQuestionScreen
+      onAnswer={onAnswer}
+      question={question}
+      renderPlayer={renderPlayer}
+      onChange={() => {}}
+      userAnswers={userAnswers}
+    />);
     const form = genreQuestion.find(`form`);
     const inputTwo = genreQuestion.find(`input`).at(1);
 
@@ -61,9 +73,8 @@ describe(`GenreQuestionScreen component`, () => {
 
     expect(onAnswer).toHaveBeenCalledTimes(1);
 
-    expect(onAnswer.mock.calls[0][0]).toMatchObject(question);
-    expect(onAnswer.mock.calls[0][1]).toMatchObject(userAnswer);
+    expect(onAnswer.mock.calls[0][0]).toEqual(void 0);
 
-    expect(genreQuestion.find(`input`).map((it) => it.prop(`checked`))).toEqual(userAnswer);
+    expect(genreQuestion.find(`input`).map((it) => it.prop(`checked`))).toEqual(userAnswers);
   });
 });

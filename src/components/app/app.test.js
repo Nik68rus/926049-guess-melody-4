@@ -50,9 +50,11 @@ it(`App correctly renders after relaunch`, () => {
           gameTime={0}
           maxMistakes={0}
           step={-1}
+          mistakes={0}
           questions={questions}
           onUserAnswer={()=>{}}
           onWelcomeButtonClick={() => {}}
+          onReplayButtonClick={() => {}}
         />
       </Provider>, {createNodeMock: () => {
         return {};
@@ -72,9 +74,11 @@ it(`Render GenreQuestionScreen`, () => {
             gameTime={0}
             maxMistakes={0}
             step={0}
+            mistakes={0}
             questions={questions}
             onUserAnswer={()=>{}}
             onWelcomeButtonClick={() => {}}
+            onReplayButtonClick={() => {}}
           />
         </Provider>, {
           createNodeMock: () => {
