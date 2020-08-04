@@ -12,6 +12,7 @@ const ActionType = {
   INCREMENT_MISTAKES: `INCREMENT_MISTAKES`,
   INCREMENT_STEP: `INCREMENT_STEP`,
   RESET: `RESET`,
+  GO_TO_WELCOME: `GO_TO_WELCOME`,
 };
 
 const isArtistAnswerCorrect = (question, userAnswer) => {
@@ -53,6 +54,13 @@ const ActionCreator = {
       type: ActionType.RESET,
       payload: null,
     };
+  },
+
+  goToWelcome: () => {
+    return {
+      type: ActionType.GO_TO_WELCOME,
+      payload: null,
+    };
   }
 };
 
@@ -72,6 +80,9 @@ const reducer = (state = initialState, action) => {
 
     case ActionType.RESET:
       return extend(initialState, {step: 0});
+
+    case ActionType.GO_TO_WELCOME:
+      return extend(initialState, {step: -1});
   }
 
   return state;
