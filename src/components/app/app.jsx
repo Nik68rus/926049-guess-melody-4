@@ -2,9 +2,9 @@ import React, {PureComponent} from "react";
 import WelcomeScreen from "../welcome-screen/welcome-screen";
 import GenreQuestionScreen from "../genre-question-screen/genre-question-screen";
 import ArtistQuestionScreen from "../artist-question-screen/artist-question-screen";
-import {GameType, AuthorizationStatus} from "../../const";
+import {GameType, AuthorizationStatus, AppRoute} from "../../const";
 import PropTypes from 'prop-types';
-import {Switch, Route, BrowserRouter} from "react-router-dom";
+import {Switch, Route, Router} from "react-router-dom";
 import GameScreen from '../game-screen/game-screen';
 import withActivePlayer from "../../hocs/with-active-player/with-active-player";
 import {connect} from 'react-redux';
@@ -17,6 +17,8 @@ import {getQuestions} from '../../reducer/data/selectors';
 import {getAuthorizationStatus} from '../../reducer/user/selectors';
 import {Operation as UserOperation} from "../../reducer/user/user";
 import AuthScreen from "../auth-screen/auth-screen";
+import PrivateRoute from '../private-route/private-route';
+import history from '../../history';
 
 const GenreQuestionScreenWrapped = withActivePlayer(withUserAnswer(GenreQuestionScreen));
 const ArtistQuestionScreenWrapped = withActivePlayer(ArtistQuestionScreen);
@@ -26,7 +28,6 @@ class App extends PureComponent {
   _renderGameScreen() {
     const {
       authorizationStatus,
-      login,
       gameTime,
       maxMistakes,
       questions,
@@ -34,7 +35,6 @@ class App extends PureComponent {
       mistakes,
       onUserAnswer,
       onWelcomeButtonClick,
-      onReplayButtonClick,
     } = this.props;
     const question = questions[step];
 
@@ -49,29 +49,14 @@ class App extends PureComponent {
     }
 
     if (mistakes >= maxMistakes) {
-      return (
-        <GameOverScreen
-          onReplayButtonClick={onReplayButtonClick}
-        />
-      );
+      return history.push(AppRoute.LOSE);
     }
 
     if (step >= questions.length) {
       if (authorizationStatus === AuthorizationStatus.AUTH) {
-        return (
-          <WinScreen
-            questionsCount={questions.length}
-            mistakesCount={mistakes}
-            onReplayButtonClick={onReplayButtonClick}
-          />
-        );
+        return history.push(AppRoute.RESULT);
       } else if (authorizationStatus === AuthorizationStatus.NO_AUTH) {
-        return (
-          <AuthScreen
-            onReplayButtonClick={onReplayButtonClick}
-            onSubmit={login}
-          />
-        );
+        return history.push(AppRoute.LOGIN);
       }
 
       return null;
@@ -104,33 +89,29 @@ class App extends PureComponent {
   }
 
   render() {
-    const {questions} = this.props;
+    const {questions, login, onReplayButtonClick, mistakes} = this.props;
     return (
-      <BrowserRouter>
+      <Router history={history}>
         <Switch>
-          <Route exact path="/">
+          <Route exact path={AppRoute.ROOT}>
             {this._renderGameScreen()}
           </Route>
-          <Route exact path="/artist">
-            <ArtistQuestionScreenWrapped
-              question={questions[1]}
-              onAnswer={() => {}}
-            />
-          </Route>
-          <Route exact path="/genre">
-            <GenreQuestionScreenWrapped
-              question={questions[0]}
-              onAnswer={() => {}}
-            />
-          </Route>
-          <Route exact path="/dev-auth">
+          <Route exact path={AppRoute.LOGIN}>
             <AuthScreen
-              onReplayButtonClick={() => {}}
-              onSubmit={() => {}}
+              onReplayButtonClick={onReplayButtonClick}
+              onSubmit={login}
             />
           </Route>
+          <Route exact path={AppRoute.LOSE}>
+            <GameOverScreen onReplayButtonClick={onReplayButtonClick} />
+          </Route>
+          <PrivateRoute exact path={AppRoute.RESULT} render={() => {
+            return (
+              <WinScreen questionsCount={questions.length} mistakesCount={mistakes} onReplayButtonClick={onReplayButtonClick} />
+            );
+          }}/>
         </Switch>
-      </BrowserRouter>
+      </Router>
     );
   }
 }
